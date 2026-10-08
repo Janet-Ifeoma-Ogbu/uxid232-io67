@@ -1,13 +1,56 @@
+<?php
+declare(strict_types=1);
+
+$search_term = '';
+$error_message = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    if (!isset($_POST['search_term']) || trim($_POST['search_term']) === '') {
+        $error_message = 'Please enter a recipe name.';
+    } else {
+        $search_term = trim($_POST['search_term']);
+
+        if (strlen($search_term) < 2) {
+            $error_message = 'Search term must be at least 2 characters long.';
+        }
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>Assksadffsad</title>
-  </head>
-  <body>
-    <?php
-  echo "<p>Loading the cookbook...</p>";
-    ?>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Search</title>
+</head>
+<body>
+
+  <h1>Recipe Search</h1>
+
+  <form method="post" action="">
+    <label for="search_term">Recipe Name:</label>
+    <input
+      type="text"
+      id="search_term"
+      name="search_term"
+      value="<?= htmlspecialchars($search_term) ?>"
+    >
+    <button type="submit">Search</button>
+  </form>
+
+  <?php if ($error_message !== ''): ?>
+    <p><?= htmlspecialchars($error_message) ?></p>
+  <?php endif; ?>
+
+  <?php if ($error_message === '' && $search_term !== ''): ?>
+    <h2>Search Results</h2>
+    <p>
+      You searched for:
+      <strong><?= htmlspecialchars($search_term) ?></strong>
+    </p>
+  <?php endif; ?>
+
+</body>
 </html>
