@@ -4,6 +4,10 @@ declare(strict_types=1);
 $search_term = '';
 $error_message = '';
 
+function e(string $value): string {
+    return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!isset($_POST['search_term']) || trim($_POST['search_term']) === '') {
@@ -21,36 +25,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recipe Search</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Search</title>
 </head>
+
 <body>
 
-  <h1>Recipe Search</h1>
+    <h1>Recipe Search</h1>
 
-  <form method="post" action="">
-    <label for="search_term">Recipe Name:</label>
-    <input
-      type="text"
-      id="search_term"
-      name="search_term"
-      value="<?= htmlspecialchars($search_term) ?>"
-    >
-    <button type="submit">Search</button>
-  </form>
+    <form method="post" action="">
+        <label for="search_term">Recipe Name:</label>
 
-  <?php if ($error_message !== ''): ?>
-    <p><?= htmlspecialchars($error_message) ?></p>
-  <?php endif; ?>
+        <input
+            type="text"
+            id="search_term"
+            name="search_term"
+            value="<?= e($search_term) ?>"
+        >
 
-  <?php if ($error_message === '' && $search_term !== ''): ?>
-    <h2>Search Results</h2>
-    <p>
-      You searched for:
-      <strong><?= htmlspecialchars($search_term) ?></strong>
-    </p>
-  <?php endif; ?>
+        <button type="submit">Search</button>
+    </form>
+
+    <?php if ($error_message !== ''): ?>
+        <p><?= e($error_message) ?></p>
+    <?php endif; ?>
+
+    <?php if ($error_message === '' && $search_term !== ''): ?>
+        <h2>Search Results</h2>
+
+        <p>
+            You searched for:
+            <strong><?= e($search_term) ?></strong>
+        </p>
+    <?php endif; ?>
 
 </body>
 </html>
+
+
